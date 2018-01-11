@@ -7,30 +7,14 @@
 #include "js/js.h"
 using namespace js;
 
-class Var;
 
-class VarObject{
-    std::unordered_map<std::string, VarRef> data;
-public:
-    VarObject(){
-        printf("fuck");
-    }
-
-};
-
-namespace js {
+namespace js_core {
     std::ostream &operator<<(std::ostream &os, const VarRef &var1) {
         os << *(var1.ptr);
         return os;
     }
 
-
-
 }
-
-typedef VarRef var;
-
-using param = const VarRef &;
 
 class Console{
 public:
@@ -45,6 +29,9 @@ int main() {
     var a = 1;
     a = 2;
     a = 3;
+
+    var uu = false;
+    std::cout << uu;
 
     for(var i = 1; i < 10; ++i){
         console.log(i + "result");
@@ -75,25 +62,13 @@ int main() {
 
     };
 
-    Function<VarRef, VarRef> mfunc = [](param a, param b) -> VarRef {
-        std::cout << a << std::endl;
-        return a;
-    };
-
-    BaseFunction &uu = mfunc;
-
-    std::function<VarRef(param, param)> kk = [](param a, param b) -> VarRef {
-        std::cout << a << std::endl;
-        return a;
-    };
-
-    var k2 = [](param a) -> VarRef {
+    var k2 = [](param a) -> var {
         std::cout << a << std::endl;
         return a;
     };
 
 
-    var k = [](param a, param b) -> VarRef {
+    var k = [](param a, param b) -> var {
         std::cout << a << std::endl;
         return a;
     };
@@ -109,5 +84,16 @@ int main() {
     std::cout << a << std::endl;
 
     std::cout << "Hello, World!" << std::endl;
+
+
+
+    var foo = [](param a, param b){
+        return a + b;
+    };
+
+    var obj = {
+            { "hello", [](param a){ return a; } }
+    };
+
     return 0;
 }

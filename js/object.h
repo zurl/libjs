@@ -6,7 +6,7 @@
 #define LIBJS_OBJECT_H
 
 #include "var_ref.h"
-namespace js {
+namespace js_core {
 
     class Object {
     protected:

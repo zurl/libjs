@@ -7,7 +7,7 @@
 
 #include "common.h"
 
-namespace js{
+namespace js_core{
 
     class Exception{
     public:

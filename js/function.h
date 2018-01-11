@@ -8,7 +8,7 @@
 #include "var_ref.h"
 #include "object.h"
 
-namespace js {
+namespace js_core {
     class BaseFunction: public Object {
     public:
 

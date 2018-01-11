@@ -11,7 +11,7 @@
 #include "array.h"
 
 
-namespace js {
+namespace js_core {
     class Var {
 
         friend class VarRef;
@@ -40,7 +40,9 @@ namespace js {
             strcpy(val_str, str);
         }
 
-        Var(int val_int) : val_int(val_int), type(Type::INT) {}
+        Var(int val_int) : val_int(val_int), type(Type::INT) {
+            printf("hello %d %d %p\n", type, val_int, this);
+        }
 
         Var(double val_double) : val_double(val_double), type(Type::DOUBLE) {}
 
@@ -74,9 +76,9 @@ namespace js {
         Var &operator=(Var && var) = delete;
 
 
-        void push(VarRef ref){
+        void push(VarRef && ref){
             if(!is_array()) throw TypeException();
-            dynamic_cast<Array*>(val_object)->push_back(ref);
+            dynamic_cast<Array*>(val_object)->push_back(std::forward<VarRef>(ref));
         }
 
 
@@ -109,6 +111,9 @@ namespace js {
                 case Type::STR:
                     os << var1.val_str;
                     break;
+                case Type::BOOLEAN:
+                    os << (var1.val_int ? "true" : "false");
+                    break;
                 case Type::FUNC:
                     os << "[FUNCTION]";
                     break;
@@ -120,7 +125,7 @@ namespace js {
 
 
         ~Var() {
-            printf("ohno %d\n", type);
+            printf("ohno %d %d %p\n", type, val_int, this);
             if( type == Type::STR ) delete val_str;
             if( type == Type::OBJECT
                 || type == Type::FUNC
@@ -183,17 +188,23 @@ namespace js {
     void create_array_iter(const VarRef &arr);
 
     template <typename ...T>
-    void create_array_iter(const VarRef &arr, VarRef ref, T&&... args){
-        arr.ptr->push(ref);
+    void create_array_iter(const VarRef &arr, VarRef && ref, T&&... args){
+        printf("hehe_in\n");
+        arr.ptr->push(std::forward<VarRef>(ref));
         create_array_iter(arr, std::forward<T>(args)...);
+        printf("hehe_out\n");
     }
 
-    template <typename ...T>
-    VarRef array(T&&... args){
-        VarRef arr1 = VAR_ARRAY();
-        create_array_iter(arr1, std::forward<T>(args)...);
-        return arr1;
-    }
+    class ArrayVarRef: public VarRef{
+    public:
+        template <typename ...T>
+        explicit ArrayVarRef(T&&... args): VarRef(VAR_ARRAY()){
+            create_array_iter(*this, std::forward<T>(args)...);
+
+        }
+    };
+
+
 }
 
 #endif //LIBJS_VAR_H

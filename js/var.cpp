@@ -4,7 +4,7 @@
 
 #include "var.h"
 
-namespace js{
+namespace js_core{
 
     void create_array_iter(const VarRef &arr) {
         return;

@@ -7,9 +7,11 @@
 
 #include "common.h"
 
-namespace js {
+namespace js_core {
     class KeyValuePair;
     class Var;
+    class ArrayVarRef;
+
     class VarRef {
     public:
         std::shared_ptr<Var> ptr;
@@ -18,11 +20,13 @@ namespace js {
             ptr = std::make_shared<Var>(_);
         }
 
+        VarRef(ArrayVarRef && val) noexcept;
+
         VarRef(const VarRef &val);
 
         VarRef(VarRef &&val) noexcept;
 
-        explicit VarRef(bool val_boolean);
+        VarRef(bool val_boolean);
 
         template<typename T>
         VarRef(const T &val) {
@@ -32,9 +36,10 @@ namespace js {
         VarRef(const std::initializer_list<KeyValuePair> l, ...);
 
         VarRef &operator=(const VarRef & val);
+        VarRef &operator=(VarRef && val);
         VarRef &operator=(int val_int);
         VarRef &operator=(double val_double);
-
+        VarRef &operator=(bool val_boolean);
 
         VarRef & operator--();
         VarRef & operator++();
@@ -42,16 +47,18 @@ namespace js {
         VarRef &operator-=(const VarRef & val);
         VarRef &operator*=(const VarRef & val);
         VarRef &operator/=(const VarRef & val);
-        VarRef operator+(const VarRef & val);
-        VarRef operator-(const VarRef & val);
-        VarRef operator*(const VarRef & val);
-        VarRef operator/(const VarRef & val);
-        VarRef operator<(const VarRef & val);
-        VarRef operator>(const VarRef & val);
-        VarRef operator>=(const VarRef & val);
-        VarRef operator<=(const VarRef & val);
+        VarRef operator+(const VarRef & val) const;
+        VarRef operator-(const VarRef & val) const;
+        VarRef operator*(const VarRef & val) const;
+        VarRef operator/(const VarRef & val) const;
+        bool operator<(const VarRef & val) const;
+        bool operator>(const VarRef & val) const;
+        bool operator>=(const VarRef & val) const;
+        bool operator<=(const VarRef & val) const;
 
-
+        VarRef operator+(int val) const;
+        VarRef &operator+=(int val);
+        bool operator<(int val) const;
 
         explicit operator bool() const;
 
@@ -61,10 +68,18 @@ namespace js {
         static void do_mul(VarRef & dst, const VarRef & lhs, const VarRef & rhs);
         static void do_div(VarRef & dst, const VarRef & lhs, const VarRef & rhs);
 
-        static void do_lt(VarRef & dst, const VarRef & lhs, const VarRef & rhs);
-        static void do_le(VarRef & dst, const VarRef & lhs, const VarRef & rhs);
-        static void do_ge(VarRef & dst, const VarRef & lhs, const VarRef & rhs);
-        static void do_gt(VarRef & dst, const VarRef & lhs, const VarRef & rhs);
+        static void do_add(VarRef & dst, const VarRef & lhs, int rhs);
+//        static void do_mul(VarRef & dst, const VarRef & lhs, int rhs);
+//        static void do_sub(VarRef & dst, const VarRef & lhs, int rhs);
+//        static void do_div(VarRef & dst, const VarRef & lhs, int rhs);
+//        static void do_add(VarRef & dst, int lhs, const VarRef & rhs);
+//        static void do_sub(VarRef & dst, int lhs, const VarRef & rhs);
+//        static void do_div(VarRef & dst, int lhs, const VarRef & rhs);
+
+        static bool do_lt(const VarRef & lhs, const VarRef & rhs);
+        static bool do_le(const VarRef & lhs, const VarRef & rhs);
+        static bool do_lt(const VarRef & lhs, int rhs);
+        // static bool do_lt(int lhs, const VarRef & rhs);
 
 
         template<typename ...ArgTypes>

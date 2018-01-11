@@ -10,4 +10,11 @@
 #include "function.h"
 #include "object.h"
 
+namespace js {
+    using var = js_core::VarRef;
+    using param = const var &;
+    using array = js_core::ArrayVarRef;
+}
+
+
 #endif //LIBJS_JS_H

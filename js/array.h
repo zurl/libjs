@@ -9,7 +9,7 @@
 #include "common.h"
 #include "object.h"
 
-namespace js{
+namespace js_core{
 
     class Array: public Object{
 
@@ -57,12 +57,12 @@ namespace js{
             array.reserve(10);
         }
 
-        void push_back(const VarRef &value){
+        void push_back(VarRef && value){
             if( is_sparse ){
-                set_kv(std::to_string(max_size++), value);
+                set_kv(std::to_string(max_size++), std::move(value));
             }
             else{
-                array.emplace_back(value);
+                array.emplace_back(std::move(value));
             }
         }
 
