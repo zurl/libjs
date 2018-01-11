@@ -84,7 +84,7 @@ namespace js_core {
 
         template<typename ...ArgTypes>
         VarRef operator()(ArgTypes &&... args) {
-            return (*ptr)(std::forward(args)...);
+            return (*ptr)(std::forward<ArgTypes>(args)...);
         }
 
         template<typename T>

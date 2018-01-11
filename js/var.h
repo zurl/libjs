@@ -96,7 +96,7 @@ namespace js_core {
         template<typename ...ArgTypes>
         VarRef operator()(ArgTypes &&... args) {
             return dynamic_cast<BaseFunction *>(val_object)
-                    ->operator()(std::forward(args)...);
+                    ->operator()(std::forward<ArgTypes>(args)...);
         }
 
 

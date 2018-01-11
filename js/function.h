@@ -14,7 +14,8 @@ namespace js_core {
 
         template<typename ...ArgTypes>
         VarRef operator()(ArgTypes &&... args) {
-            std::vector<VarRef> argvec(7);
+            std::vector<VarRef> argvec;
+            argvec.reserve(7);
             return pack(argvec, std::forward<ArgTypes>(args)...);
         }
 

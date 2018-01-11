@@ -74,7 +74,7 @@ int main() {
     };
 
     k["fuck"] = 1;
-    //k();
+    k();
 
     std::cout<< k["fuck"] <<std::endl;
 
@@ -92,8 +92,12 @@ int main() {
     };
 
     var obj = {
-            { "hello", [](param a){ return a; } }
+            { "hello", [](param a){
+                printf("ok!############");
+                return a; } }
     };
+
+    obj["hello"](1);
 
     return 0;
 }

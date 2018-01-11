@@ -1,6 +1,7 @@
 # libjs
 Write code like javascript in cpp
 
+Compatible with C++ 11 ( C++14/17 is ok, but not necessary)
 
 ### demo
 
